@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { Mic, Square, Upload, Loader2 } from 'lucide-react';
+import { Mic, Square, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
+
 
 const AudioRecorder = ({ onRecordingComplete }) => {
   const [isRecording, setIsRecording] = useState(false);
@@ -68,7 +69,7 @@ const AudioRecorder = ({ onRecordingComplete }) => {
   };
 
   return (
-    <div className="flex flex-col items-center gap-4 w-full max-w-md mx-auto">
+    <div className="audio-recorder-container">
       <AnimatePresence mode="wait">
         {!isRecording && !audioBlob && (
           <motion.button
@@ -76,9 +77,9 @@ const AudioRecorder = ({ onRecordingComplete }) => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             onClick={startRecording}
-            className="flex items-center gap-2 px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-md hover:shadow-lg"
+            className="record-button"
           >
-            <Mic className="w-5 h-5" />
+            <Mic />
             Start Recording
           </motion.button>
         )}
@@ -88,21 +89,14 @@ const AudioRecorder = ({ onRecordingComplete }) => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="flex flex-col items-center gap-4"
+            className="recording-container"
           >
-            <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ repeat: Infinity, duration: 1.5 }}
-              className="w-16 h-16 rounded-full bg-red-500 flex items-center justify-center"
-            >
-              <Mic className="w-8 h-8 text-white" />
-            </motion.div>
-            <p className="text-lg font-semibold">{formatDuration(recordingDuration)}</p>
-            <button
-              onClick={stopRecording}
-              className="flex items-center gap-2 px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-all shadow-md hover:shadow-lg"
-            >
-              <Square className="w-5 h-5" />
+            <div className="recording-indicator">
+              <Mic />
+            </div>
+            <p className="duration-text">{formatDuration(recordingDuration)}</p>
+            <button onClick={stopRecording} className="stop-button">
+              <Square />
               Stop Recording
             </button>
           </motion.div>
@@ -113,18 +107,15 @@ const AudioRecorder = ({ onRecordingComplete }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="flex flex-col items-center gap-4 w-full"
+            className="audio-controls"
           >
             <audio 
               src={URL.createObjectURL(audioBlob)} 
               controls 
-              className="w-full max-w-xs rounded-lg shadow-md"
+              className="audio-player"
             />
-            <button
-              onClick={handleUpload}
-              className="flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all shadow-md hover:shadow-lg"
-            >
-              <Upload className="w-5 h-5" />
+            <button onClick={handleUpload} className="upload-button">
+              <Upload />
               Use Recording
             </button>
           </motion.div>
@@ -136,7 +127,7 @@ const AudioRecorder = ({ onRecordingComplete }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: [0.5, 1] }}
           transition={{ repeat: Infinity, duration: 1 }}
-          className="text-sm text-red-500 font-medium"
+          className="recording-status"
         >
           Recording in progress...
         </motion.div>
