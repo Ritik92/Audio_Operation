@@ -24,7 +24,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'No file uploaded' }, { status: 400 });
     }
 
-    // Save the file to a temporary location
+    // @ts-ignore
     const buffer = Buffer.from(await file.arrayBuffer());
     const tempFilePath = join(tmpdir(), `uploaded-audio-${Date.now()}.wav`);
     fs.writeFileSync(tempFilePath, buffer);
